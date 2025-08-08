@@ -5,7 +5,9 @@
 This comprehensive e-learning platform, built with **Flutter** for a seamless mobile experience and a powerful **React-based web admin panel**, is designed to revolutionize how students learn and educators manage content. Dive into an intuitive and engaging learning environment, backed by robust administrative tools.
 
 ## 📱 Mobile App Screenshots
-
+<img width="2188" height="1146" alt="CleanShot 2025-08-08 at 13 31 24@2x" src="https://github.com/user-attachments/assets/fb995764-6f81-46d0-9045-49f53b28dd57" />
+<br>
+<br>
 <p align="center">
   <img src="https://github.com/user-attachments/assets/444f2796-aee1-4f33-959d-3b51ca77d8dc" alt="iPhone Screenshot 1" width="200"/>
   <img src="https://github.com/user-attachments/assets/90189c24-995b-4928-983f-82adc5d4358a" alt="iPhone Screenshot 2" width="200"/>
@@ -41,16 +43,16 @@ Our E-Learning App is packed with functionalities to create a dynamic and effect
 
 ## 🖥️ Web Admin Panel (Built with React)
 
-Empower your administrators with a powerful, intuitive web-based control center:
+Empower administrators with this robust panel:  
+👉 **[Elearning-Web-Admin GitHub Repository](https://github.com/tanvir-robin/Elearning-Web-Admin)**
 
-* **Comprehensive Course Management:** Effortlessly create, update, and organize courses, modules, lessons, and all associated learning content.
-* **Streamlined User Management:** Take full control of user accounts, roles, and permissions, ensuring a secure and well-organized platform.
-* **Efficient Enrollment Tracking:** Monitor student enrollments, manage course access, and gain insights into user participation.
-* **Dynamic Exam & Quiz Configuration:** Design, configure, and review online exams and quizzes with ease, tailoring assessments to your specific course needs.
-* **Transparent Payment Monitoring:** Keep a close eye on all financial transactions, ensuring clear oversight of your platform's revenue.
-* **Seamless Content Uploads:** Easily upload and categorize various learning materials, making content management a breeze.
-* **Targeted Notification Delivery:** Send specific push notifications to individual users or groups, ensuring effective communication.
-* **Certificate Oversight:** Manage and review all generated certificates, maintaining a clear record of student accomplishments.
+* Full course and module management
+* User and instructor control panel
+* Enrollment and payment tracking
+* Exam and quiz configuration
+* Content upload and category control
+* Notification management
+* Certificate generation oversight
 
 ---
 
@@ -134,10 +136,28 @@ We welcome contributions of all kinds! If you have ideas for new features, encou
 
 ---
 
+## 🙋‍♂️ About Me
+
+Hi, I'm **Tanvir Robin**, a passionate developer focused on building impactful digital solutions for education and beyond.
+
+- 🔗 **Portfolio:** [tanvirrobin.dev](https://tanvirrobin.dev)
+- 💼 **LinkedIn:** [linkedin.com/in/tanvir-robin](https://linkedin.com/in/tanvirrobin)
+
+To know more about my work, projects, and experience, please visit my portfolio or connect with me on LinkedIn!
+
+
+
+## 📧 Contact
+
+For business inquiries or feedback, feel free to reach out at:  
+**📩 contact@tanvirrobin.dev**
+
+---
+
 ## 📄 License
 
 This project is open-sourced under the [MIT License](LICENSE).
 
 ---
 
-**Developed with ❤️ by Robin**
+> © 2025 Tanvir Robin — All rights reserved.
