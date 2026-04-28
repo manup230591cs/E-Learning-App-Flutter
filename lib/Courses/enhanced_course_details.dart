@@ -3,12 +3,12 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
-import 'package:online_cource_app/Courses/course_play.dart';
-import 'package:online_cource_app/Utils/enroll_dioulouge.dart';
+import 'package:e_learning/Courses/course_play.dart';
+import 'package:e_learning/Utils/enroll_dioulouge.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:online_cource_app/Model/course_model.dart';
-import 'package:online_cource_app/controllers/auth_controller.dart';
-import 'package:online_cource_app/theme/app_theme.dart';
+import 'package:e_learning/Model/course_model.dart';
+import 'package:e_learning/controllers/auth_controller.dart';
+import 'package:e_learning/theme/app_theme.dart';
 import 'package:readmore/readmore.dart';
 
 class EnhancedCourseDetailsPage extends StatefulWidget {
