@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:online_cource_app/Model/model.dart.dart';
-import 'package:online_cource_app/constants.dart';
+import 'package:e_learning/Model/model.dart.dart';
+import 'package:e_learning/constants.dart';
 
 class CourseContent extends StatelessWidget {
   const CourseContent({

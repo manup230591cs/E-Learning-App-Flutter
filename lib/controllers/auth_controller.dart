@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:online_cource_app/Utils/dialouge_utils.dart';
+import 'package:e_learning/Utils/dialouge_utils.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find<AuthController>();
