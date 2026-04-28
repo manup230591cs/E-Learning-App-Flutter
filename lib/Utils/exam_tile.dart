@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:online_cource_app/Exam/exam_screen.dart';
+import 'package:e_learning/Exam/exam_screen.dart';
 
 class ExamTile extends StatelessWidget {
   final String name;

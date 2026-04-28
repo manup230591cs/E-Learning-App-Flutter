@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:online_cource_app/Model/course_model.dart';
-import 'package:online_cource_app/Utils/dialouge_utils.dart';
-import 'package:online_cource_app/Utils/toast_messages.dart';
+import 'package:e_learning/Model/course_model.dart';
+import 'package:e_learning/Utils/dialouge_utils.dart';
+import 'package:e_learning/Utils/toast_messages.dart';
 
 void showEnrollmentDialog(BuildContext context, CourseModel course) {
   showDialog(
