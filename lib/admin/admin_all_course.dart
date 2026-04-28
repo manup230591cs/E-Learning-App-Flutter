@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:online_cource_app/admin/add_new_course.dart';
+import 'package:e_learning/admin/add_new_course.dart';
 
 class AdminCoursesScreen extends StatelessWidget {
   const AdminCoursesScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:online_cource_app/Detail/course_content.dart';
-import 'package:online_cource_app/constants.dart';
+import 'package:e_learning/Detail/course_content.dart';
+import 'package:e_learning/constants.dart';
 import 'dart:ui';
 
 class CoursesDetail extends StatefulWidget {
