@@ -41,7 +41,7 @@ class _ExamScreenState extends State<ExamScreen>
   List<Question> questions = [];
   int score = 0;
   late ConfettiController _confettiController;
-  late Timer _timer;
+  Timer? _timer;
   int _remainingTime = 0;
 
   @override
@@ -49,6 +49,8 @@ class _ExamScreenState extends State<ExamScreen>
     super.initState();
     futureQuestions = loadQuestions(widget.questionPath);
     futureQuestions.then((questionList) {
+      if (!mounted) return;
+
       setState(() {
         questions = questionList.questions;
         _remainingTime = questions.length * 10; // 10 seconds per question
@@ -60,12 +62,18 @@ class _ExamScreenState extends State<ExamScreen>
   }
 
   void startTimer() {
+    _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
       setState(() {
         if (_remainingTime > 0) {
           _remainingTime--;
         } else {
-          _timer.cancel();
+          timer.cancel();
           _endExam();
         }
       });
@@ -97,8 +105,11 @@ class _ExamScreenState extends State<ExamScreen>
   }
 
   void _endExam() async {
+    _timer?.cancel();
     showLoadingDialouge(context, 'Analyzing Results...');
     await _generateAndSendPDF();
+    if (!mounted) return;
+
     setState(() {
       currentIndex = questions.length; // Show final score screen
     });
@@ -256,7 +267,7 @@ class _ExamScreenState extends State<ExamScreen>
   @override
   void dispose() {
     _confettiController.dispose();
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 

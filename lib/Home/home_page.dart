@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
-import 'package:e_learning/Courses/enhanced_course_details.dart';
 import 'package:e_learning/Detail/course_detail.dart';
-import 'package:e_learning/Model/course_model.dart';
 import 'package:e_learning/Model/model.dart.dart';
 import 'package:e_learning/theme/app_theme.dart';
 import 'package:e_learning/Utils/custom_drawer.dart';
-import 'package:e_learning/constants.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -20,22 +14,16 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocus = FocusNode();
   bool _isSearching = false;
   bool _isLoading = true;
-  late AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
 
     // Simulate loading data
     Future.delayed(const Duration(seconds: 1), () {
@@ -51,7 +39,6 @@ class _MyHomePageState extends State<MyHomePage>
   void dispose() {
     _searchController.dispose();
     _searchFocus.dispose();
-    _animationController.dispose();
     super.dispose();
   }
 
@@ -446,7 +433,7 @@ class _MyHomePageState extends State<MyHomePage>
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    "${onlineCourceOne[index]['session']} lessons",
+                    "${onlineCourceOne[index]['courses']}",
                     style: TextStyle(
                       color: AppTheme.secondaryTextColor,
                       fontSize: 13,
@@ -455,7 +442,7 @@ class _MyHomePageState extends State<MyHomePage>
                 ],
               ),
               Text(
-                "৳${onlineCourceOne[index]['price']}",
+                "${onlineCourceOne[index]['price']}",
                 style: TextStyle(
                   color: AppTheme.primaryColor,
                   fontWeight: FontWeight.bold,
@@ -672,7 +659,7 @@ class _MyHomePageState extends State<MyHomePage>
                                             ),
                                             const SizedBox(width: 4),
                                             Text(
-                                              "${onlineCourceOne[index]['session']} lessons",
+                                              "${onlineCourceOne[index]['courses']}",
                                               style: TextStyle(
                                                 color:
                                                     AppTheme.secondaryTextColor,
@@ -683,7 +670,7 @@ class _MyHomePageState extends State<MyHomePage>
                                         ),
                                         const Spacer(),
                                         Text(
-                                          "৳${onlineCourceOne[index]['price']}",
+                                          "${onlineCourceOne[index]['price']}",
                                           style: TextStyle(
                                             color: AppTheme.primaryColor,
                                             fontWeight: FontWeight.bold,
