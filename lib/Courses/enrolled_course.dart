@@ -29,12 +29,26 @@ class EnrolledCourseItem extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  course.cover,
-                  width: double.infinity,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
+                child: course.cover.isEmpty
+                    ? Container(
+                        width: double.infinity,
+                        height: 100,
+                        color: Colors.grey[300],
+                        child: const Icon(Icons.image_not_supported),
+                      )
+                    : Image.network(
+                        course.cover,
+                        width: double.infinity,
+                        height: 100,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            Container(
+                          width: double.infinity,
+                          height: 100,
+                          color: Colors.grey[300],
+                          child: const Icon(Icons.image_not_supported),
+                        ),
+                      ),
               ),
               const SizedBox(height: 8),
               Text(
@@ -100,13 +114,22 @@ class EnrolledCoursesScreen extends StatelessWidget {
 }
 
 Stream<List<CourseModel>> getCoursesStream() {
+  final uid = FirebaseAuth.instance.currentUser?.uid;
+
+  if (uid == null || uid.isEmpty) {
+    return Stream.value([]);
+  }
+
   return FirebaseFirestore.instance
       .collection('users')
-      .doc(FirebaseAuth.instance.currentUser?.uid)
-      .collection('enrollment')
+      .doc(uid)
+      .collection('enrolledCourses')
+      .orderBy('lastAccessed', descending: true)
       .snapshots()
       .map((snapshot) => snapshot.docs
-          .map(
-              (doc) => CourseModel.fromJson(doc.data()))
+          .map((doc) => CourseModel.fromJson({
+                ...doc.data(),
+                'id': doc.id,
+              }))
           .toList());
 }

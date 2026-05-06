@@ -105,7 +105,7 @@ class AppTheme {
           color: secondaryTextColor,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: cardColor,
         elevation: cardElevation,
         shape: RoundedRectangleBorder(
@@ -186,7 +186,7 @@ class AppTheme {
           color: errorColor,
         ),
       ),
-      tabBarTheme: TabBarTheme(
+      tabBarTheme: TabBarThemeData(
         indicator: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           color: primaryColor,
