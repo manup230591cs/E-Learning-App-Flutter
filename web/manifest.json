@@ -1,6 +1,6 @@
 {
-    "name": "online_cource_app",
-    "short_name": "online_cource_app",
+    "name": "e_learning",
+    "short_name": "e_learning",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
