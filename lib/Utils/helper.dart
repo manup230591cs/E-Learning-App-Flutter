@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' as rootBundle;
-import 'package:online_cource_app/question_model.dart';
+import 'package:e_learning/question_model.dart';
 
 // Function to load and parse JSON data
 Future<QuestionList> loadQuestions() async {
