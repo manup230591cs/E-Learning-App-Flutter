@@ -19,10 +19,11 @@ class CourseViewPage extends StatefulWidget {
 }
 
 class _CourseViewPageState extends State<CourseViewPage> {
-  late VideoPlayerController _videoController;
+  VideoPlayerController? _videoController;
   ChewieController? _chewieController;
   bool _isFullScreen = false;
   bool _isVideoLoaded = false;
+  String? _videoError;
 
   @override
   void initState() {
@@ -31,27 +32,42 @@ class _CourseViewPageState extends State<CourseViewPage> {
   }
 
   Future<void> _initializeVideoPlayer() async {
-    final videoUrl = await _getVideoUrl();
-    _videoController = VideoPlayerController.network(videoUrl)
-      ..initialize().then((_) {
-        setState(() {
-          _chewieController = ChewieController(
-            videoPlayerController: _videoController,
-            autoPlay: true,
-            looping: false,
-            showControls: true,
-            allowFullScreen: true,
-            materialProgressColors: ChewieProgressColors(
-              playedColor: Colors.blue,
-              handleColor: Colors.blue,
-              backgroundColor: Colors.grey,
-              bufferedColor: Colors.lightBlueAccent,
-            ),
-            fullScreenByDefault: false,
-          );
-          _isVideoLoaded = true;
-        });
+    try {
+      final videoUrl = await _getVideoUrl();
+      final controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+      await controller.initialize();
+
+      if (!mounted) {
+        await controller.dispose();
+        return;
+      }
+
+      setState(() {
+        _videoController = controller;
+        _chewieController = ChewieController(
+          videoPlayerController: controller,
+          autoPlay: true,
+          looping: false,
+          showControls: true,
+          allowFullScreen: true,
+          materialProgressColors: ChewieProgressColors(
+            playedColor: Colors.blue,
+            handleColor: Colors.blue,
+            backgroundColor: Colors.grey,
+            bufferedColor: Colors.lightBlueAccent,
+          ),
+          fullScreenByDefault: false,
+        );
+        _isVideoLoaded = true;
       });
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _videoError = 'Unable to load course video.';
+        });
+      }
+      debugPrint('Error initializing course video: $e');
+    }
   }
 
   Future<String> _getVideoUrl() async {
@@ -61,7 +77,7 @@ class _CourseViewPageState extends State<CourseViewPage> {
 
   @override
   void dispose() {
-    _videoController.dispose();
+    _videoController?.dispose();
     _chewieController?.dispose();
     super.dispose();
   }
@@ -74,20 +90,27 @@ class _CourseViewPageState extends State<CourseViewPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.fullscreen),
-            onPressed: () {
-              setState(() {
-                _isFullScreen = !_isFullScreen;
-              });
-              if (_isFullScreen) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => FullScreenVideoPage(
-                      chewieController: _chewieController!,
-                    ),
-                  ),
-                );
-              }
-            },
+            onPressed: _chewieController == null
+                ? null
+                : () async {
+                    setState(() {
+                      _isFullScreen = true;
+                    });
+
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => FullScreenVideoPage(
+                          chewieController: _chewieController!,
+                        ),
+                      ),
+                    );
+
+                    if (mounted) {
+                      setState(() {
+                        _isFullScreen = false;
+                      });
+                    }
+                  },
           ),
         ],
       ),
@@ -115,17 +138,42 @@ class _CourseViewPageState extends State<CourseViewPage> {
                               ? MediaQuery.of(context).size.height
                               : 250,
                           child: Center(
-                            child: Image.network(
-                              widget.course.cover,
-                              fit: BoxFit.cover,
-                            ),
+                            child: widget.course.cover.isEmpty
+                                ? const Icon(
+                                    Icons.image_not_supported,
+                                    color: Colors.white,
+                                    size: 56,
+                                  )
+                                : Image.network(
+                                    widget.course.cover,
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(
+                                      Icons.image_not_supported,
+                                      color: Colors.white,
+                                      size: 56,
+                                    ),
+                                  ),
                           ),
                         ),
-                        const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
+                        Center(
+                          child: _videoError == null
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Text(
+                                    _videoError!,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
                           ),
-                        ),
                       ],
                     ),
             ),
@@ -306,11 +354,8 @@ class _CoursePageState extends State<CoursePage>
       // In a real app, you'd fetch the user's progress for this course
       _currentProgress = 0.25; // 25% completion as an example
 
-      // Update the progress in the database if course has an ID
-      if (widget.course.id != null) {
-        await _authController.updateCourseProgress(
-            widget.course.id!, _currentProgress);
-      }
+      await _authController.updateCourseProgress(
+          widget.course.documentId, _currentProgress);
     } catch (e) {
       debugPrint('Error loading course data: $e');
     } finally {
@@ -323,30 +368,41 @@ class _CoursePageState extends State<CoursePage>
   }
 
   Future<void> _initializeVideoPlayer() async {
-    _videoPlayerController = VideoPlayerController.network(_sampleVideoUrl);
+    try {
+      _videoPlayerController =
+          VideoPlayerController.networkUrl(Uri.parse(_sampleVideoUrl));
 
-    await _videoPlayerController!.initialize();
+      await _videoPlayerController!.initialize();
 
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController!,
-      autoPlay: false,
-      looping: false,
-      aspectRatio: 16 / 9,
-      placeholder: Container(
-        color: Colors.black,
-        child: const Center(
-          child: CircularProgressIndicator(),
+      if (!mounted) {
+        return;
+      }
+
+      _chewieController = ChewieController(
+        videoPlayerController: _videoPlayerController!,
+        autoPlay: false,
+        looping: false,
+        aspectRatio: 16 / 9,
+        placeholder: Container(
+          color: Colors.black,
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
         ),
-      ),
-      materialProgressColors: ChewieProgressColors(
-        playedColor: AppTheme.primaryColor,
-        handleColor: AppTheme.primaryColor,
-        backgroundColor: Colors.grey[300]!,
-        bufferedColor: AppTheme.primaryColor.withOpacity(0.3),
-      ),
-    );
+        materialProgressColors: ChewieProgressColors(
+          playedColor: AppTheme.primaryColor,
+          handleColor: AppTheme.primaryColor,
+          backgroundColor: Colors.grey[300]!,
+          bufferedColor: AppTheme.primaryColor.withOpacity(0.3),
+        ),
+      );
 
-    setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
+    } catch (e) {
+      debugPrint('Error initializing sample video: $e');
+    }
   }
 
   @override
