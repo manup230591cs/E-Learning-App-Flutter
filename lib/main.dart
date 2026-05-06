@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import 'package:online_cource_app/auth_gate.dart';
-import 'package:online_cource_app/controllers/auth_controller.dart';
-import 'package:online_cource_app/firebase_options.dart';
-import 'package:online_cource_app/theme/app_theme.dart';
+import 'package:e_learning/auth_gate.dart';
+import 'package:e_learning/controllers/auth_controller.dart';
+import 'package:e_learning/firebase_options.dart';
+import 'package:e_learning/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
