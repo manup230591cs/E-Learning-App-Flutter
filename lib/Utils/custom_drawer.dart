@@ -73,10 +73,9 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(OctIcons.sign_out),
             title: const Text('Sign Out'),
-            onTap: () {
-              // Navigate to LoginPage
-              AuthController().signOutUsers();
-              Get.off(() => const LoginPage());
+            onTap: () async {
+              await Get.find<AuthController>().signOutUsers();
+              Get.offAll(() => const LoginPage());
             },
           ),
         ],

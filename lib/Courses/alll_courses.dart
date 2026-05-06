@@ -16,8 +16,18 @@ class CourseListPage extends StatelessWidget {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('courses').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Error loading courses: ${snapshot.error}'),
+            );
+          }
+
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text('No courses found.'));
           }
 
           var courses = snapshot.data!.docs;
@@ -25,8 +35,11 @@ class CourseListPage extends StatelessWidget {
           return ListView.builder(
             itemCount: courses.length,
             itemBuilder: (context, index) {
-              var course = CourseModel.fromJson(
-                  courses[index].data() as Map<String, dynamic>);
+              final data = courses[index].data() as Map<String, dynamic>;
+              var course = CourseModel.fromJson({
+                ...data,
+                'id': courses[index].id,
+              });
 
               return CourseCard(
                 course: course,
@@ -60,12 +73,24 @@ class CourseCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.0),
           child: Stack(
             children: [
-              Image.network(
-                course.cover,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 200.0,
-              ),
+              if (course.cover.isNotEmpty)
+                Image.network(
+                  course.cover,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 200.0,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    height: 200,
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.image_not_supported, size: 48),
+                  ),
+                )
+              else
+                Container(
+                  height: 200,
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.image_not_supported, size: 48),
+                ),
               Container(
                 width: double.infinity,
                 height: 200.0,
