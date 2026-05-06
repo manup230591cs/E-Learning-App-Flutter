@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:online_cource_app/Courses/course_play.dart';
-import 'package:online_cource_app/Model/course_model.dart'; // Import Firestore if you're using it
+import 'package:e_learning/Courses/course_play.dart';
+import 'package:e_learning/Model/course_model.dart'; // Import Firestore if you're using it
 
 class EnrolledCourseItem extends StatelessWidget {
   final CourseModel course;

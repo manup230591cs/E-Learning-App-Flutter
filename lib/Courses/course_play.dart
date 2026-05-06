@@ -5,9 +5,9 @@ import 'package:video_player/video_player.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:online_cource_app/Model/course_model.dart';
-import 'package:online_cource_app/controllers/auth_controller.dart';
-import 'package:online_cource_app/theme/app_theme.dart';
+import 'package:e_learning/Model/course_model.dart';
+import 'package:e_learning/controllers/auth_controller.dart';
+import 'package:e_learning/theme/app_theme.dart';
 
 class CourseViewPage extends StatefulWidget {
   final CourseModel course;
