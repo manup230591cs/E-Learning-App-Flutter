@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:online_cource_app/Utils/exam_tile.dart';
+import 'package:e_learning/Utils/exam_tile.dart';
 
 class ExamHome extends StatelessWidget {
   const ExamHome({super.key});
