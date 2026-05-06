@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:online_cource_app/Login/login_page.dart';
-import 'package:online_cource_app/Utils/dialouge_utils.dart';
-import 'package:online_cource_app/Utils/toast_messages.dart';
-import 'package:online_cource_app/controllers/auth_controller.dart';
-import 'package:online_cource_app/theme/app_theme.dart';
+import 'package:e_learning/Login/login_page.dart';
+import 'package:e_learning/Utils/dialouge_utils.dart';
+import 'package:e_learning/Utils/toast_messages.dart';
+import 'package:e_learning/controllers/auth_controller.dart';
+import 'package:e_learning/theme/app_theme.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});

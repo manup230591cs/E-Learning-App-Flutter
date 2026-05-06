@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:online_cource_app/Utils/enroll_dioulouge.dart';
+import 'package:e_learning/Utils/enroll_dioulouge.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:online_cource_app/Model/course_model.dart';
+import 'package:e_learning/Model/course_model.dart';
 
 class CourseDetailsPage extends StatelessWidget {
   final CourseModel course;

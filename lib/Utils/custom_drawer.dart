@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:online_cource_app/About/about_screen.dart';
-import 'package:online_cource_app/Courses/alll_courses.dart';
-import 'package:online_cource_app/Courses/enrolled_course.dart';
-import 'package:online_cource_app/Exam/exam_home.dart';
+import 'package:e_learning/About/about_screen.dart';
+import 'package:e_learning/Courses/alll_courses.dart';
+import 'package:e_learning/Courses/enrolled_course.dart';
+import 'package:e_learning/Exam/exam_home.dart';
 
-import 'package:online_cource_app/Home/home_page.dart';
-import 'package:online_cource_app/Login/login_page.dart';
+import 'package:e_learning/Home/home_page.dart';
+import 'package:e_learning/Login/login_page.dart';
 
-import 'package:online_cource_app/controllers/auth_controller.dart';
+import 'package:e_learning/controllers/auth_controller.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
