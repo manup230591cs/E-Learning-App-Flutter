@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:online_cource_app/controllers/auth_controller.dart';
-import 'package:online_cource_app/Login/login_page.dart';
-import 'package:online_cource_app/navigation/main_navigation.dart';
-import 'package:online_cource_app/theme/app_theme.dart';
+import 'package:e_learning/controllers/auth_controller.dart';
+import 'package:e_learning/Login/login_page.dart';
+import 'package:e_learning/navigation/main_navigation.dart';
+import 'package:e_learning/theme/app_theme.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
