@@ -102,7 +102,7 @@ Ensure you have the following installed and configured:
     ```
 2.  **Navigate to the app directory:**
     ```bash
-    cd E-Learning-App-Flutter/e_learning_app # Adjust if your app's directory name is different
+    cd E-Learning-App-Flutter
     ```
 3.  **Install Flutter dependencies:**
     ```bash
@@ -112,6 +112,20 @@ Ensure you have the following installed and configured:
     ```bash
     flutter run
     ```
+
+
+### Android Studio startup lock issue (Windows)
+
+If Android Studio shows an error like `DirectoryLock$CannotActivateException` and says `studio64.exe` is still running:
+
+1. Close all Android Studio windows.
+2. Open Task Manager and end any `studio64.exe` / `java.exe` processes related to Android Studio.
+3. Remove stale lock files from the JetBrains config/system folders (for example under `%APPDATA%\Google\AndroidStudio*` and `%LOCALAPPDATA%\Google\AndroidStudio*`).
+4. Start Android Studio again.
+
+If a GitHub PR or commit row still shows `main`, that is typically the **base/default branch label** in UI. Create/checkout your feature branch and open the PR with:
+- **base**: `main`
+- **compare/head**: your feature branch (for example `MAIN_WORK_OF_FORKED`)
 
 #### Web Admin Panel
 
