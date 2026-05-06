@@ -50,6 +50,12 @@ class AdminCoursesScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final course = courses[index];
               final data = course.data() as Map<String, dynamic>;
+              final instructorValue = data['instructor'];
+              final instructors = instructorValue is List
+                  ? instructorValue.join(', ')
+                  : instructorValue?.toString() ?? 'Unknown';
+              final cover = data['cover']?.toString() ?? '';
+
               return Card(
                 margin: const EdgeInsets.all(12.0),
                 elevation: 4.0,
@@ -58,12 +64,19 @@ class AdminCoursesScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (data['cover'] != null)
+                      if (cover.isNotEmpty)
                         Image.network(
-                          data['cover'],
+                          cover,
                           height: 200,
                           width: double.infinity,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
+                            height: 200,
+                            width: double.infinity,
+                            color: Colors.grey[300],
+                            child: const Icon(Icons.image_not_supported),
+                          ),
                         ),
                       const SizedBox(height: 12),
                       Text(
@@ -75,7 +88,7 @@ class AdminCoursesScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Instructor: ${(data['instructor'] as List).join(', ')}',
+                        'Instructor: $instructors',
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 8),
