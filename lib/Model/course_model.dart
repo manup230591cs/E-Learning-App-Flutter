@@ -17,19 +17,66 @@ class CourseModel {
     this.price = 0.0, // Default value
   });
 
+  String get documentId {
+    final trimmedId = id?.trim();
+    if (trimmedId != null && trimmedId.isNotEmpty) {
+      return trimmedId;
+    }
+
+    final titleId = title
+        .trim()
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), '-')
+        .replaceAll(RegExp(r'^-|-$'), '');
+
+    return titleId.isNotEmpty ? titleId : 'course';
+  }
+
   // fromJSON constructor with default values
   factory CourseModel.fromJson(Map<String, dynamic> json) {
+    final instructorValue = json['instructor'] ?? json['instructors'];
+    List<String> parsedInstructors;
+
+    if (instructorValue is List) {
+      parsedInstructors =
+          instructorValue.map((item) => item.toString()).toList();
+    } else if (instructorValue is String && instructorValue.trim().isNotEmpty) {
+      parsedInstructors =
+          instructorValue.split(',').map((item) => item.trim()).toList();
+    } else {
+      parsedInstructors = const ['Instructor'];
+    }
+
+    parsedInstructors = parsedInstructors
+        .map((item) => item.trim())
+        .where((item) => item.isNotEmpty)
+        .toList();
+    if (parsedInstructors.isEmpty) {
+      parsedInstructors = const ['Instructor'];
+    }
+
+    final priceValue = json['price'];
+    final double parsedPrice;
+
+    if (priceValue is num) {
+      parsedPrice = priceValue.toDouble();
+    } else if (priceValue is String) {
+      parsedPrice =
+          double.tryParse(priceValue.replaceAll(RegExp(r'[^0-9.]'), '')) ??
+              0.0;
+    } else {
+      parsedPrice = 0.0;
+    }
+
     return CourseModel(
-      id: json['id'] as String?,
-      cover: json['cover'] as String,
-      duration: json['duration'] as String,
-      instructors: List<String>.from(json['instructor'] ?? []),
-      title: json['title'] as String,
-      description:
-          json['description'] ?? 'No description available', // Default value
-      price: json['price'] != null
-          ? (json['price'] as num).toDouble()
-          : 1400.0, // Default value
+      id: json['id']?.toString(),
+      cover: json['cover']?.toString() ?? '',
+      duration: json['duration']?.toString() ?? 'Self paced',
+      instructors: parsedInstructors,
+      title: json['title']?.toString() ?? 'Untitled Course',
+      description: json['description']?.toString() ??
+          'No description available', // Default value
+      price: parsedPrice,
     );
   }
 

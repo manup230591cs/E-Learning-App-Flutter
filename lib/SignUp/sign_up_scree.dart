@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:e_learning/Login/login_page.dart';
 import 'package:e_learning/Utils/dialouge_utils.dart';
 import 'package:e_learning/Utils/toast_messages.dart';
 import 'package:e_learning/controllers/auth_controller.dart';
+import 'package:e_learning/navigation/main_navigation.dart';
 import 'package:e_learning/theme/app_theme.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -61,11 +61,20 @@ class _SignUpPageState extends State<SignUpPage>
 
     try {
       showLoadingDialouge(context, 'Signing up...');
-      await auth.signUpNewUsers(context, _emailController.text.trim(),
-          _passwordController.text.trim(), _nameController.text.trim());
+      final user = await auth.signUpNewUsers(
+        context,
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+        _nameController.text.trim(),
+      );
       Get.back();
-      showSuccessToast(context, 'Successfully signed up');
-      Get.to(() => const LoginPage());
+
+      if (user != null) {
+        showSuccessToast(context, 'Successfully signed up');
+        Get.offAll(() => const MainNavigationScreen());
+      } else {
+        showErrorToast(context, 'Could not create your account');
+      }
     } catch (e) {
       Get.back();
       showErrorToast(context, 'Error: ${e.toString()}');
@@ -342,7 +351,7 @@ class _SignUpPageState extends State<SignUpPage>
                         ),
                         TextButton(
                           onPressed: () {
-                            Get.to(() => const LoginPage());
+                            Get.back();
                           },
                           style: TextButton.styleFrom(
                             foregroundColor: AppTheme.primaryColor,

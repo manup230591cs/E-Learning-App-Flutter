@@ -1,13 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:e_learning/Model/course_model.dart';
 import 'package:e_learning/Utils/dialouge_utils.dart';
 import 'package:e_learning/Utils/toast_messages.dart';
+import 'package:e_learning/controllers/auth_controller.dart';
 
-void showEnrollmentDialog(BuildContext context, CourseModel course) {
-  showDialog(
+Future<bool?> showEnrollmentDialog(BuildContext context, CourseModel course) {
+  return showDialog<bool>(
     context: context,
     barrierDismissible: true,
     builder: (BuildContext context) {
@@ -112,18 +111,25 @@ void showEnrollmentDialog(BuildContext context, CourseModel course) {
                         ),
                       ),
                       onPressed: () async {
-                        // Handle the enrollment action here
                         showLoadingDialouge(
                             context, "Saving Changes. Please wait...");
-                        FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(FirebaseAuth.instance.currentUser?.uid)
-                            .collection('enrollment')
-                            .add(course.toJson());
-                        Get.back();
-                        Get.back();
-                        showSuccessToast(context,
-                            'You Have Successfully enrolled to the Course');
+
+                        final authController = Get.find<AuthController>();
+                        final success =
+                            await authController.enrollInCourse(course);
+
+                        if (!context.mounted) return;
+
+                        Navigator.of(context, rootNavigator: true).pop();
+
+                        if (success) {
+                          Navigator.of(context).pop(true);
+                          showSuccessToast(context,
+                              'You have successfully enrolled in the course');
+                        } else {
+                          showErrorDialouge(context,
+                              'Could not enroll in this course. Please try again.');
+                        }
                       },
                       child: const Text(
                         'Enroll',
