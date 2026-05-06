@@ -12,16 +12,32 @@ class AddCourseScreen extends StatefulWidget {
 class _AddCourseScreenState extends State<AddCourseScreen> {
   final _formKey = GlobalKey<FormState>();
   final _firestore = FirebaseFirestore.instance;
+  final TextEditingController _instructorController = TextEditingController();
 
   String _cover = '';
   String _title = '';
   String _duration = '';
+  String _description = '';
+  double _price = 0.0;
   List<String> _instructors = [];
   String _tempInstructor = '';
+
+  @override
+  void dispose() {
+    _instructorController.dispose();
+    super.dispose();
+  }
 
   void _addCourse() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+
+      if (_instructors.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please add at least one instructor.')),
+        );
+        return;
+      }
 
       try {
         // Show loading indicator
@@ -33,6 +49,10 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
           'title': _title,
           'duration': _duration,
           'instructor': _instructors,
+          'description': _description,
+          'price': _price,
+          'enrollmentCount': 0,
+          'createdAt': FieldValue.serverTimestamp(),
         });
 
         // Hide loading indicator
@@ -47,6 +67,8 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
         _formKey.currentState!.reset();
         setState(() {
           _instructors = [];
+          _tempInstructor = '';
+          _instructorController.clear();
         });
       } catch (e) {
         // Hide loading indicator
@@ -133,6 +155,44 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                 ),
                 const SizedBox(height: 20),
 
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Price',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) {
+                    final price = double.tryParse(value ?? '');
+                    if (price == null || price < 0) {
+                      return 'Please enter a valid price';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _price = double.tryParse(value ?? '') ?? 0.0;
+                  },
+                ),
+                const SizedBox(height: 20),
+
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Description',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 4,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a course description';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _description = value!;
+                  },
+                ),
+                const SizedBox(height: 20),
+
                 // Instructor Input
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,12 +220,13 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            controller: _instructorController,
                             decoration: const InputDecoration(
                               labelText: 'Add Instructor',
                               border: OutlineInputBorder(),
                             ),
                             onChanged: (value) {
-                              _tempInstructor = value;
+                              _tempInstructor = value.trim();
                             },
                           ),
                         ),
@@ -176,6 +237,7 @@ class _AddCourseScreenState extends State<AddCourseScreen> {
                               setState(() {
                                 _instructors.add(_tempInstructor);
                                 _tempInstructor = '';
+                                _instructorController.clear();
                               });
                             }
                           },
