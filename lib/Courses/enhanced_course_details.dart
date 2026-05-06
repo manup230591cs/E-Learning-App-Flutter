@@ -61,66 +61,12 @@ class _EnhancedCourseDetailsPageState extends State<EnhancedCourseDetailsPage>
     });
 
     final isEnrolled =
-        await _authController.isEnrolledInCourse(widget.course.id ?? "");
+        await _authController.isEnrolledInCourse(widget.course.documentId);
 
     setState(() {
       _isEnrolled = isEnrolled;
       _isLoading = false;
     });
-  }
-
-  Future<void> _startCourse() async {
-    // Navigate to the course player
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CoursePage(course: widget.course),
-      ),
-    );
-  }
-
-  Future<void> _enrollCourse() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final result = await _authController.enrollInCourse(
-          widget.course.id ?? "", widget.course.price);
-
-      if (result) {
-        setState(() {
-          _isEnrolled = true;
-        });
-
-        // Show success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Successfully enrolled in the course!'),
-            backgroundColor: AppTheme.successColor,
-          ),
-        );
-      } else {
-        // Show error message
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to enroll in the course. Please try again.'),
-            backgroundColor: AppTheme.errorColor,
-          ),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: ${e.toString()}'),
-          backgroundColor: AppTheme.errorColor,
-        ),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
   }
 
   @override
@@ -1020,8 +966,14 @@ class _EnhancedCourseDetailsPageState extends State<EnhancedCourseDetailsPage>
                     label: const Text('Continue Learning'),
                   )
                 : ElevatedButton(
-                    onPressed: () {
-                      showEnrollmentDialog(context, widget.course);
+                    onPressed: () async {
+                      final enrolled =
+                          await showEnrollmentDialog(context, widget.course);
+                      if (enrolled == true && mounted) {
+                        setState(() {
+                          _isEnrolled = true;
+                        });
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(16),

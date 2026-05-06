@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:e_learning/Model/course_model.dart';
 import 'package:e_learning/Utils/dialouge_utils.dart';
 
 class AuthController extends GetxController {
@@ -125,29 +126,41 @@ class AuthController extends GetxController {
   }
 
   // Method to enroll in a course
-  Future<bool> enrollInCourse(String courseId, double price) async {
+  Future<bool> enrollInCourse(CourseModel course) async {
     try {
       isLoading.value = true;
 
       if (currentUser != null) {
-        // Add course to user's enrolled courses
-        await _firestore
+        final courseId = course.documentId;
+        final enrollmentRef = _firestore
             .collection('users')
             .doc(currentUser!.uid)
             .collection('enrolledCourses')
-            .doc(courseId)
-            .set({
-          'courseId': courseId,
-          'enrolledAt': FieldValue.serverTimestamp(),
-          'progress': 0.0,
-          'lastAccessed': FieldValue.serverTimestamp(),
-          'price': price,
-        });
+            .doc(courseId);
+        final existingEnrollment = await enrollmentRef.get();
+        final existingData = existingEnrollment.data();
 
-        // Increment course enrollment count
-        await _firestore.collection('courses').doc(courseId).update({
-          'enrollmentCount': FieldValue.increment(1),
-        });
+        // Add course to user's enrolled courses
+        await enrollmentRef.set({
+          ...course.toJson(),
+          'id': courseId,
+          'courseId': courseId,
+          'enrolledAt':
+              existingData?['enrolledAt'] ?? FieldValue.serverTimestamp(),
+          'progress': existingData?['progress'] ?? 0.0,
+          'lastAccessed': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+
+        // Increment course enrollment count when the source course document exists.
+        if (!existingEnrollment.exists) {
+          try {
+            await _firestore.collection('courses').doc(courseId).update({
+              'enrollmentCount': FieldValue.increment(1),
+            });
+          } catch (e) {
+            debugPrint('Could not update course enrollment count: $e');
+          }
+        }
 
         return true;
       }
