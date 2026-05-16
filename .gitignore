@@ -32,6 +32,15 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+**/build/
+**/*.zip
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/android/.gradle/
+**/android/local.properties
+**/ios/Pods/
+**/ios/.symlinks/
 
 # Symbolication related
 app.*.symbols
